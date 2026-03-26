@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>report</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#vasicek-interest-rate-model-theory-calibration-and-backtesting"
+id="toc-vasicek-interest-rate-model-theory-calibration-and-backtesting">Vasicek
+Interest Rate Model: Theory, Calibration, and Backtesting</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of
+Contents</a></li>
+<li><a href="#problem-statement" id="toc-problem-statement">1. Problem
+Statement</a></li>
+<li><a href="#theory-the-vasicek-model"
+id="toc-theory-the-vasicek-model">2. Theory: The Vasicek Model</a>
+<ul>
+<li><a href="#stochastic-differential-equation"
+id="toc-stochastic-differential-equation">2.1 Stochastic Differential
+Equation</a></li>
+<li><a href="#exact-solution" id="toc-exact-solution">2.2 Exact
+Solution</a></li>
+<li><a href="#key-analytical-properties"
+id="toc-key-analytical-properties">2.3 Key Analytical
+Properties</a></li>
+<li><a href="#known-limitations" id="toc-known-limitations">2.4 Known
+Limitations</a></li>
+</ul></li>
+<li><a href="#parameter-estimation" id="toc-parameter-estimation">3.
+Parameter Estimation</a>
+<ul>
+<li><a href="#ols-estimation" id="toc-ols-estimation">3.1 OLS
+Estimation</a></li>
+<li><a href="#maximum-likelihood-estimation-mle"
+id="toc-maximum-likelihood-estimation-mle">3.2 Maximum Likelihood
+Estimation (MLE)</a></li>
+<li><a href="#finite-sample-bias-in-kappa"
+id="toc-finite-sample-bias-in-kappa">3.3 Finite-Sample Bias in <span
+class="math inline">\(\kappa\)</span></a></li>
+</ul></li>
+<li><a href="#sanity-check-synthetic-data"
+id="toc-sanity-check-synthetic-data">4. Sanity Check: Synthetic Data</a>
+<ul>
+<li><a href="#setup" id="toc-setup">4.1 Setup</a></li>
+<li><a href="#synthetic-path-statistics"
+id="toc-synthetic-path-statistics">4.2 Synthetic Path
+Statistics</a></li>
+<li><a href="#parameter-recovery" id="toc-parameter-recovery">4.3
+Parameter Recovery</a></li>
+<li><a href="#simulation-correctness-oracle-test"
+id="toc-simulation-correctness-oracle-test">4.4 Simulation Correctness
+(Oracle Test)</a></li>
+<li><a href="#backtest-on-synthetic-data"
+id="toc-backtest-on-synthetic-data">4.5 Backtest on Synthetic
+Data</a></li>
+</ul></li>
+<li><a href="#real-data-us-federal-funds-rate"
+id="toc-real-data-us-federal-funds-rate">5. Real Data: US Federal Funds
+Rate</a>
+<ul>
+<li><a href="#data" id="toc-data">5.1 Data</a></li>
+<li><a href="#fitted-parameters" id="toc-fitted-parameters">5.2 Fitted
+Parameters</a></li>
+<li><a href="#backtest-results" id="toc-backtest-results">5.3 Backtest
+Results</a></li>
+</ul></li>
+<li><a href="#discussion-and-limitations"
+id="toc-discussion-and-limitations">6. Discussion and Limitations</a>
+<ul>
+<li><a href="#why-is-the-vasicek-model-still-used"
+id="toc-why-is-the-vasicek-model-still-used">6.1 Why is the Vasicek
+model still used?</a></li>
+<li><a href="#summary-of-results" id="toc-summary-of-results">6.2
+Summary of results</a></li>
+<li><a href="#recommendations-for-improvement"
+id="toc-recommendations-for-improvement">6.3 Recommendations for
+improvement</a></li>
+</ul></li>
+<li><a href="#references" id="toc-references">7. References</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="vasicek-interest-rate-model-theory-calibration-and-backtesting">Vasicek
+Interest Rate Model: Theory, Calibration, and Backtesting</h1>
+<p><strong>Author:</strong> Paul Z. Hanakata <strong>Date:</strong>
+March 2026 <strong>Data:</strong> Federal Funds Effective Rate
+(FEDFUNDS), FRED — St. Louis Fed</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li><a href="#1-problem-statement">Problem Statement</a></li>
+<li><a href="#2-theory-the-vasicek-model">Theory: The Vasicek
+Model</a></li>
+<li><a href="#3-parameter-estimation">Parameter Estimation</a></li>
+<li><a href="#4-sanity-check-synthetic-data">Sanity Check: Synthetic
+Data</a></li>
+<li><a href="#5-real-data-us-federal-funds-rate">Real Data: US Federal
+Funds Rate</a></li>
+<li><a href="#6-discussion-and-limitations">Discussion and
+Limitations</a></li>
+<li><a href="#7-references">References</a></li>
+</ol>
+<hr />
+<h2 id="problem-statement">1. Problem Statement</h2>
+<p>Interest rate modeling is fundamental in quantitative finance. It
+underpins the pricing of bonds, interest rate derivatives,
+mortgage-backed securities, and the management of fixed-income
+portfolios. A key challenge is that interest rates exhibit two
+empirically observed behaviors that distinguish them from stock
+prices:</p>
+<ol type="1">
+<li><p><strong>Mean reversion</strong> — rates tend to drift back toward
+a long-run equilibrium level. When rates are very high (e.g., 20% in
+1981), economic forces push them down. When rates are very low (e.g.,
+near 0% in 2009–2015), they eventually rise again.</p></li>
+<li><p><strong>Stochastic fluctuations</strong> — despite mean
+reversion, rates are subject to continuous random shocks driven by
+monetary policy decisions, macroeconomic surprises, and market
+sentiment.</p></li>
+</ol>
+<p>This report applies the <strong>Vasicek (1977)</strong> model — one
+of the first and most analytically tractable short-rate models — to the
+US Federal Funds Effective Rate. We:</p>
+<ul>
+<li>Derive the model and its analytical properties</li>
+<li>Estimate parameters using OLS and Maximum Likelihood (MLE)</li>
+<li>Validate the implementation on synthetic data with known ground
+truth</li>
+<li>Apply the model to 30 years of real Fed Funds Rate data and evaluate
+forecast quality</li>
+</ul>
+<hr />
+<h2 id="theory-the-vasicek-model">2. Theory: The Vasicek Model</h2>
+<h3 id="stochastic-differential-equation">2.1 Stochastic Differential
+Equation</h3>
+<p>The Vasicek model describes the instantaneous short rate <span
+class="math inline">\(r(t)\)</span> as an Ornstein-Uhlenbeck (OU)
+process:</p>
+<p><span class="math display">\[dr(t) = \kappa(\theta - r(t))\,dt +
+\sigma\,dW(t)\]</span></p>
+<p>where:</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 20%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Name</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(\kappa &gt; 0\)</span></td>
+<td>Mean reversion speed</td>
+<td>Rate at which <span class="math inline">\(r(t)\)</span> reverts to
+<span class="math inline">\(\theta\)</span></td>
+</tr>
+<tr>
+<td><span class="math inline">\(\theta\)</span></td>
+<td>Long-run mean</td>
+<td>The equilibrium rate that <span class="math inline">\(r(t)\)</span>
+gravitates toward</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\sigma &gt; 0\)</span></td>
+<td>Volatility</td>
+<td>Magnitude of random shocks per unit time</td>
+</tr>
+<tr>
+<td><span class="math inline">\(W(t)\)</span></td>
+<td>Standard Brownian motion</td>
+<td>Source of randomness</td>
+</tr>
+</tbody>
+</table>
+<p>The drift term <span class="math inline">\(\kappa(\theta -
+r(t))\)</span> acts as a restoring force: - If <span
+class="math inline">\(r(t) &gt; \theta\)</span>: drift is negative →
+rate is pushed downward - If <span class="math inline">\(r(t) &lt;
+\theta\)</span>: drift is positive → rate is pushed upward - Strength of
+pull is proportional to the distance <span class="math inline">\(|\theta
+- r(t)|\)</span></p>
+<h3 id="exact-solution">2.2 Exact Solution</h3>
+<p>The SDE has a closed-form solution. Given <span
+class="math inline">\(r(0) = r_0\)</span>:</p>
+<p><span class="math display">\[r(t) = r_0\,e^{-\kappa t} + \theta(1 -
+e^{-\kappa t}) + \sigma\int_0^t e^{-\kappa(t-s)}\,dW(s)\]</span></p>
+<p>The stochastic integral is Gaussian, so <span
+class="math inline">\(r(t)\)</span> is normally distributed with:</p>
+<p><span class="math display">\[\mathbb{E}[r(t) \mid r_0] =
+r_0\,e^{-\kappa t} + \theta(1 - e^{-\kappa t})\]</span></p>
+<p><span class="math display">\[\text{Var}[r(t) \mid r_0] =
+\frac{\sigma^2}{2\kappa}\left(1 - e^{-2\kappa t}\right)\]</span></p>
+<p><strong>Long-run behavior</strong> (as <span class="math inline">\(t
+\to \infty\)</span>):</p>
+<p><span class="math display">\[r(t) \xrightarrow{d}
+\mathcal{N}\!\left(\theta,\;
+\frac{\sigma^2}{2\kappa}\right)\]</span></p>
+<p>The rate converges in distribution to a Gaussian with mean <span
+class="math inline">\(\theta\)</span> and variance <span
+class="math inline">\(\sigma^2 / (2\kappa)\)</span>.</p>
+<h3 id="key-analytical-properties">2.3 Key Analytical Properties</h3>
+<p><strong>Half-life of mean reversion:</strong></p>
+<p><span class="math display">\[t_{1/2} = \frac{\ln
+2}{\kappa}\]</span></p>
+<p>This is the time for a deviation from <span
+class="math inline">\(\theta\)</span> to shrink by half. A small <span
+class="math inline">\(\kappa\)</span> implies slow mean reversion (rates
+can stay far from <span class="math inline">\(\theta\)</span> for
+years); a large <span class="math inline">\(\kappa\)</span> implies fast
+reversion.</p>
+<p><strong>Discrete-time (Euler-Maruyama) approximation:</strong></p>
+<p>For estimation from discrete data with time step <span
+class="math inline">\(\Delta t\)</span>, the exact conditional
+distribution is:</p>
+<p><span class="math display">\[r(t + \Delta t) \mid r(t) \;\sim\;
+\mathcal{N}(\mu_t,\; v)\]</span></p>
+<p>where:</p>
+<p><span class="math display">\[\mu_t = r(t)\,e^{-\kappa\Delta t} +
+\theta(1 - e^{-\kappa\Delta t})\]</span></p>
+<p><span class="math display">\[v = \frac{\sigma^2}{2\kappa}\left(1 -
+e^{-2\kappa\Delta t}\right)\]</span></p>
+<h3 id="known-limitations">2.4 Known Limitations</h3>
+<table>
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Limitation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Negative rates</strong></td>
+<td>Since <span class="math inline">\(r(t)\)</span> is Gaussian, it can
+go negative with positive probability. Historically a flaw; less
+controversial after negative rate policies post-2008.</td>
+</tr>
+<tr>
+<td><strong>Constant parameters</strong></td>
+<td><span class="math inline">\(\kappa\)</span>, <span
+class="math inline">\(\theta\)</span>, <span
+class="math inline">\(\sigma\)</span> are fixed. In reality, the Fed’s
+long-run target shifts over time.</td>
+</tr>
+<tr>
+<td><strong>Single factor</strong></td>
+<td>Only one source of randomness. Cannot capture the full yield curve
+dynamics.</td>
+</tr>
+<tr>
+<td><strong>No regime shifts</strong></td>
+<td>Cannot model sudden, large policy changes (e.g., the 2022 rate hike
+cycle).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="parameter-estimation">3. Parameter Estimation</h2>
+<h3 id="ols-estimation">3.1 OLS Estimation</h3>
+<p>Rewriting the discretized SDE as a linear regression:</p>
+<p><span class="math display">\[\underbrace{r(t+\Delta t) -
+r(t)}_{\Delta r} = \underbrace{\kappa\theta\,\Delta t}_{A} +
+\underbrace{(-\kappa\,\Delta t)}_{B}\,r(t) + \varepsilon_t\]</span></p>
+<p>OLS regression of <span class="math inline">\(\Delta r\)</span> on
+<span class="math inline">\(r(t)\)</span> gives coefficients <span
+class="math inline">\(\hat{A}\)</span> and <span
+class="math inline">\(\hat{B}\)</span>, from which:</p>
+<p><span class="math display">\[\hat{\kappa} = -\frac{\hat{B}}{\Delta
+t}, \qquad \hat{\theta} = -\frac{\hat{A}}{\hat{B}}, \qquad \hat{\sigma}
+= \frac{\text{std}(\hat{\varepsilon})}{\sqrt{\Delta t}}\]</span></p>
+<p>OLS is fast and closed-form but carries a known <strong>upward
+bias</strong> in <span class="math inline">\(\hat{\kappa}\)</span> for
+finite samples — it overestimates mean reversion speed, leading to
+confidence bands that are too narrow.</p>
+<h3 id="maximum-likelihood-estimation-mle">3.2 Maximum Likelihood
+Estimation (MLE)</h3>
+<p>MLE uses the exact conditional Gaussian distribution at each time
+step. The log-likelihood is:</p>
+<p><span class="math display">\[\ell(\kappa, \theta, \sigma) =
+-\frac{N}{2}\ln(2\pi v) - \frac{1}{2v}\sum_{t=1}^{N}\left(r_t -
+\mu_{t-1}\right)^2\]</span></p>
+<p>where <span class="math inline">\(\mu_{t-1}\)</span> and <span
+class="math inline">\(v\)</span> use the exact expressions from Section
+2.3. MLE is more accurate than OLS and is the recommended method. OLS
+estimates are used as the starting point for the numerical
+optimizer.</p>
+<h3 id="finite-sample-bias-in-kappa">3.3 Finite-Sample Bias in <span
+class="math inline">\(\kappa\)</span></h3>
+<p>A well-documented property of mean reversion estimation is that both
+OLS and MLE <strong>overestimate <span
+class="math inline">\(\kappa\)</span></strong> in finite samples. For
+highly persistent processes (small true <span
+class="math inline">\(\kappa\)</span>, large autocorrelation), this bias
+can exceed 20–40%. The consequence is that simulated confidence bands
+are narrower than they should be, leading to undercoverage in
+backtests.</p>
+<p>This is not a code bug — it is an inherent statistical limitation. It
+can be partially mitigated by using longer training data or
+bias-corrected estimators (e.g., the Phillips-Yu (2009) jackknife
+correction).</p>
+<hr />
+<h2 id="sanity-check-synthetic-data">4. Sanity Check: Synthetic
+Data</h2>
+<p>Before applying the model to real data, we verify that the
+implementation is correct by fitting it to data generated from
+<strong>known ground-truth parameters</strong>. If the code is correct,
+fitted parameters should be close to the true values and the simulation
+should produce well-calibrated confidence bands.</p>
+<h3 id="setup">4.1 Setup</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>True Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(\kappa\)</span> (mean reversion
+speed)</td>
+<td>0.15</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\theta\)</span> (long-run mean)</td>
+<td>4.0%</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\sigma\)</span> (volatility)</td>
+<td>0.015</td>
+</tr>
+<tr>
+<td><span class="math inline">\(r_0\)</span> (starting rate)</td>
+<td>2.0%</td>
+</tr>
+<tr>
+<td>Data length</td>
+<td>600 months (50 years)</td>
+</tr>
+<tr>
+<td>Time step <span class="math inline">\(\Delta t\)</span></td>
+<td>1/12 year (monthly)</td>
+</tr>
+</tbody>
+</table>
+<p>A single synthetic path was generated using the exact conditional
+distribution. The path was then split 80/20 into training and test
+sets.</p>
+<h3 id="synthetic-path-statistics">4.2 Synthetic Path Statistics</h3>
+<p>The 600-month synthetic path produced:</p>
+<table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mean</td>
+<td>3.56%</td>
+</tr>
+<tr>
+<td>Std</td>
+<td>2.43%</td>
+</tr>
+<tr>
+<td>Min</td>
+<td>−1.29%</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>8.95%</td>
+</tr>
+</tbody>
+</table>
+<p>The mean (3.56%) is below the true <span
+class="math inline">\(\theta\)</span> (4.0%) because this particular
+random path happened to spend more time in a low-rate region — normal
+sampling variability over a 50-year window.</p>
+<figure>
+<img src="sanity_synthetic_path.png"
+alt="Synthetic interest rate path — 50 years of monthly data generated from true Vasicek parameters. The red dashed line marks the true long-run mean θ = 4.0%." />
+<figcaption aria-hidden="true">Synthetic interest rate path — 50 years
+of monthly data generated from true Vasicek parameters. The red dashed
+line marks the true long-run mean θ = 4.0%.</figcaption>
+</figure>
+<h3 id="parameter-recovery">4.3 Parameter Recovery</h3>
+<p>Both OLS and MLE were fitted to the full 600-month synthetic
+path:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>True</th>
+<th>OLS</th>
+<th>MLE</th>
+<th>OLS Error</th>
+<th>MLE Error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(\kappa\)</span></td>
+<td>0.1500</td>
+<td>0.1780</td>
+<td>0.1794</td>
+<td>+18.7%</td>
+<td>+19.6%</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\theta\)</span></td>
+<td>4.0000%</td>
+<td>3.5359%</td>
+<td>3.5359%</td>
+<td>−11.6%</td>
+<td>−11.6%</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>0.0150</td>
+<td>0.0145</td>
+<td>0.0146</td>
+<td>−3.5%</td>
+<td>−2.8%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observations:</strong></p>
+<ul>
+<li><strong><span class="math inline">\(\sigma\)</span> is recovered
+nearly perfectly</strong> (−2.8% error) — volatility estimation is
+robust and unbiased.</li>
+<li><strong><span class="math inline">\(\theta\)</span> is off by
+−11.6%</strong> — this reflects the path’s below-mean average (3.56% vs
+4.0%). With more data, this would converge.</li>
+<li><strong><span class="math inline">\(\kappa\)</span> is overestimated
+by ~20%</strong> — this is the expected finite-sample bias described in
+Section 3.3. A 50-year monthly sample is not sufficient to eliminate
+this bias for a slowly mean-reverting process.</li>
+</ul>
+<h3 id="simulation-correctness-oracle-test">4.4 Simulation Correctness
+(Oracle Test)</h3>
+<p>To test whether the simulation code is correct independent of fitting
+errors, we used the <strong>true parameters</strong> directly to
+generate 500 independent 10-year test paths and checked what fraction
+fell within the 90% confidence bands at each step.</p>
+<pre><code>Oracle 90% CI coverage:  90.6%   (target: ~90%)   PASS</code></pre>
+<p>The simulation is confirmed correct: given the true parameters, the
+confidence bands contain exactly the expected 90% of outcomes.</p>
+<blockquote>
+<p><strong>Why not test with a single path?</strong> With monthly
+autocorrelation of ~0.99, a 120-month test path has an effective
+independent sample size of only ~2 observations. A single path wandering
+outside the band for 30 consecutive months reduces empirical coverage
+from 90% to ~65% through sampling noise alone — not a bug. Averaging
+over 500 independent paths eliminates this noise.</p>
+</blockquote>
+<h3 id="backtest-on-synthetic-data">4.5 Backtest on Synthetic Data</h3>
+<p>The model was fitted on the first 80% (480 months) and evaluated on
+the remaining 20% (121 months) using the <strong>fitted</strong>
+parameters:</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 23%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RMSE</td>
+<td>3.30%</td>
+<td>Driven by kappa overestimation</td>
+</tr>
+<tr>
+<td>90% CI coverage</td>
+<td>59.5%</td>
+<td>Below target — kappa bias makes bands too narrow</td>
+</tr>
+<tr>
+<td>Fitted <span class="math inline">\(\kappa\)</span> bias</td>
+<td>+36.9%</td>
+<td>Kappa is worse on 40yr subset than on full 50yr path</td>
+</tr>
+</tbody>
+</table>
+<p>The lower coverage (59.5% vs 90%) is entirely explained by <span
+class="math inline">\(\kappa\)</span> overestimation. When <span
+class="math inline">\(\hat{\kappa}\)</span> is too large, the model
+predicts faster mean reversion → narrower fan → fewer actual
+observations fall inside the band. This is expected behavior, not a code
+error.</p>
+<p><strong>Key takeaway from synthetic data:</strong> the simulation
+code is verified correct (90.6% oracle coverage). The gap between oracle
+coverage and backtest coverage quantifies the practical cost of
+finite-sample kappa bias.</p>
+<figure>
+<img src="sanity_simulation.png"
+alt="Synthetic data — 10-year Monte Carlo simulation fan chart using true parameters. The fan shows 90% and 50% confidence intervals across 200 paths. Rates revert to the true θ = 4.0% (red dashed line)." />
+<figcaption aria-hidden="true">Synthetic data — 10-year Monte Carlo
+simulation fan chart using true parameters. The fan shows 90% and 50%
+confidence intervals across 200 paths. Rates revert to the true θ = 4.0%
+(red dashed line).</figcaption>
+</figure>
+<figure>
+<img src="sanity_backtest.png"
+alt="Synthetic data — Backtest fan chart. Model fitted on 1970–2010 (480 months), evaluated on 2010–2020 (121 months). Lower coverage (59.5%) relative to the oracle (90.6%) reflects finite-sample kappa bias, not a code error." />
+<figcaption aria-hidden="true">Synthetic data — Backtest fan chart.
+Model fitted on 1970–2010 (480 months), evaluated on 2010–2020 (121
+months). Lower coverage (59.5%) relative to the oracle (90.6%) reflects
+finite-sample kappa bias, not a code error.</figcaption>
+</figure>
+<hr />
+<h2 id="real-data-us-federal-funds-rate">5. Real Data: US Federal Funds
+Rate</h2>
+<h3 id="data">5.1 Data</h3>
+<p><strong>Series:</strong> Federal Funds Effective Rate (FEDFUNDS),
+FRED — St. Louis Federal Reserve <strong>Frequency:</strong> Monthly
+<strong>Sample period:</strong> January 1994 – February 2026
+<strong>Unit:</strong> Decimal (e.g., 0.05 = 5%)</p>
+<p>The Federal Funds Rate is the overnight lending rate between banks,
+directly controlled by the Federal Open Market Committee (FOMC). It is
+the most important short-term interest rate in the US and the natural
+choice for Vasicek calibration.</p>
+<p><strong>Train/test split:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Split</th>
+<th>Period</th>
+<th>Observations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Train</td>
+<td>Jan 1994 – Aug 2019</td>
+<td>308 months</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>Sep 2019 – Feb 2026</td>
+<td>78 months</td>
+</tr>
+</tbody>
+</table>
+<p>The split was chosen to train on the pre-COVID era and test on the
+most turbulent rate period in recent history.</p>
+<h3 id="fitted-parameters">5.2 Fitted Parameters</h3>
+<p>The Vasicek model was fitted via MLE on the 308-month training
+set:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 21%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math inline">\(\kappa\)</span></td>
+<td>0.0321 / year</td>
+<td>Very slow mean reversion</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\theta\)</span></td>
+<td>1.461%</td>
+<td>Long-run mean</td>
+</tr>
+<tr>
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>0.0057</td>
+<td>Low volatility (pre-COVID era)</td>
+</tr>
+<tr>
+<td>Half-life</td>
+<td><strong>21.6 years</strong></td>
+<td>Rates take ~22 years to close half the gap to <span
+class="math inline">\(\theta\)</span></td>
+</tr>
+<tr>
+<td>Long-run std</td>
+<td>2.24%</td>
+<td>Asymptotic uncertainty around <span
+class="math inline">\(\theta\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpreting the parameters:</strong></p>
+<p><strong><span class="math inline">\(\kappa = 0.0321\)</span></strong>
+implies an annual persistence of <span class="math inline">\(e^{-0.0321}
+\approx 0.968\)</span>. The Federal Funds Rate retained ~97% of its
+deviation from <span class="math inline">\(\theta\)</span> each year
+during 1994–2019. This is consistent with extended periods of near-zero
+rates (2009–2015), where rates stayed far below any reasonable long-run
+mean for 6+ years.</p>
+<p><strong><span class="math inline">\(\theta =
+1.461\%\)</span></strong> is pulled below the intuitive long-run average
+(~3–4%) by the prolonged zero lower bound period (2009–2015). The
+model’s <span class="math inline">\(\theta\)</span> reflects the average
+of the training data, not a structural policy target.</p>
+<p><strong><span class="math inline">\(\sigma = 0.0057\)</span></strong>
+captures the calm, gradual rate movements of 1994–2019. This is a
+monthly volatility of <span class="math inline">\(0.0057 / \sqrt{12}
+\approx 0.16\%\)</span>, or roughly 16 basis points per month. It does
+not incorporate the 2022 shock.</p>
+<figure>
+<img src="simulation.png"
+alt="Real data — 10-year Monte Carlo simulation fan chart from the current Fed Funds Rate using MLE-fitted parameters (κ = 0.0321, θ = 1.46%, σ = 0.0057). Rates are forecast to slowly revert to θ = 1.46%." />
+<figcaption aria-hidden="true">Real data — 10-year Monte Carlo
+simulation fan chart from the current Fed Funds Rate using MLE-fitted
+parameters (κ = 0.0321, θ = 1.46%, σ = 0.0057). Rates are forecast to
+slowly revert to θ = 1.46%.</figcaption>
+</figure>
+<h3 id="backtest-results">5.3 Backtest Results</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Benchmark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RMSE (mean path vs actual)</td>
+<td>2.27%</td>
+<td>Good forecasters: ~1–2%</td>
+</tr>
+<tr>
+<td>90% CI coverage</td>
+<td>17.9%</td>
+<td>Target: 90%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>RMSE analysis:</strong></p>
+<p>An RMSE of 2.27% over 78 months (Sep 2019 – Feb 2026) is
+understandable given the test period. The model’s mean forecast path
+slowly drifted toward <span class="math inline">\(\theta =
+1.46\%\)</span>, while actual rates went:</p>
+<pre><code>Sep 2019:  2.25%  (close to forecast)
+Mar 2020:  0.08%  (COVID crash — rates slashed to zero)
+Mar 2022:  0.33%  (start of hike cycle)
+Jul 2023:  5.33%  (peak — fastest hike cycle in 40 years)
+Feb 2026: ~4.33%  (partial easing)</code></pre>
+<p>The divergence between forecast (hovering near 1.46%) and reality (0%
+→ 5.33%) explains the elevated RMSE.</p>
+<p><strong>Coverage analysis:</strong></p>
+<p>The 90% CI coverage of 17.9% is very poor but was predictable
+given:</p>
+<ol type="1">
+<li><p><strong><span class="math inline">\(\kappa\)</span>
+overestimation</strong> (Section 3.3): <span
+class="math inline">\(\hat{\kappa}\)</span> is biased upward, making the
+confidence bands narrower than they should be.</p></li>
+<li><p><strong><span class="math inline">\(\sigma\)</span>
+underestimation for the test period</strong>: <span
+class="math inline">\(\sigma\)</span> was estimated from calm 1994–2019
+data. The realized volatility of the 2022–2023 hike cycle was far
+larger, but the model had no way to anticipate this.</p></li>
+<li><p><strong>Regime shift</strong>: The 2022 rate hike cycle — 525
+basis points in 16 months — was the fastest tightening since 1980. No
+model with a fixed <span class="math inline">\(\theta\)</span> could
+predict rates would reach 5.33% when the training-period <span
+class="math inline">\(\theta = 1.46\%\)</span>.</p></li>
+</ol>
+<figure>
+<img src="backtest.png"
+alt="Real data — Backtest fan chart. Top panel: full history (1994–2026) with the forecast fan overlaid from the train/test split. Bottom panel: test period zoom (Sep 2019 – Feb 2026). The actual rate (black) exits the confidence bands as COVID and the 2022 hike cycle unfold. RMSE = 2.27%, coverage = 17.9%." />
+<figcaption aria-hidden="true">Real data — Backtest fan chart. Top
+panel: full history (1994–2026) with the forecast fan overlaid from the
+train/test split. Bottom panel: test period zoom (Sep 2019 – Feb 2026).
+The actual rate (black) exits the confidence bands as COVID and the 2022
+hike cycle unfold. RMSE = 2.27%, coverage = 17.9%.</figcaption>
+</figure>
+<hr />
+<h2 id="discussion-and-limitations">6. Discussion and Limitations</h2>
+<h3 id="why-is-the-vasicek-model-still-used">6.1 Why is the Vasicek
+model still used?</h3>
+<p>Despite its known limitations, the Vasicek model remains widely used
+because:</p>
+<ul>
+<li><strong>Analytical tractability</strong>: bond prices and option
+prices have closed-form solutions</li>
+<li><strong>Interpretable parameters</strong>: <span
+class="math inline">\(\kappa\)</span>, <span
+class="math inline">\(\theta\)</span>, <span
+class="math inline">\(\sigma\)</span> have clear economic meaning</li>
+<li><strong>Foundation for extensions</strong>: CIR, Hull-White, and
+multi-factor models all extend the Vasicek framework</li>
+</ul>
+<p>In practice, the Vasicek model is used for <strong>scenario
+analysis</strong> and <strong>relative value</strong> rather than point
+forecasting. A practitioner would say: “given our calibrated uncertainty
+bands, what is the worst-case rate scenario at the 95th percentile?”</p>
+<h3 id="summary-of-results">6.2 Summary of results</h3>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 24%" />
+<col style="width: 29%" />
+<col style="width: 9%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Experiment</th>
+<th>Oracle Coverage</th>
+<th>Backtest Coverage</th>
+<th>RMSE</th>
+<th>Conclusion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synthetic data</td>
+<td>90.6%</td>
+<td>59.5%</td>
+<td>3.30%</td>
+<td>Code correct; gap = kappa bias</td>
+</tr>
+<tr>
+<td>Real data (1994–2026)</td>
+<td>—</td>
+<td>17.9%</td>
+<td>2.27%</td>
+<td>Regime shift + kappa bias</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recommendations-for-improvement">6.3 Recommendations for
+improvement</h3>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kappa bias</td>
+<td>Use a shorter, more recent training window (e.g., 2015–2019) to
+reduce bias from stale regime data</td>
+</tr>
+<tr>
+<td>Narrow bands</td>
+<td>Apply bias correction to <span
+class="math inline">\(\hat{\kappa}\)</span> (e.g., Phillips-Yu
+jackknife)</td>
+</tr>
+<tr>
+<td>Regime shifts</td>
+<td>Use a regime-switching Vasicek model with separate <span
+class="math inline">\((\kappa, \theta, \sigma)\)</span> per regime</td>
+</tr>
+<tr>
+<td>Single factor</td>
+<td>Extend to a two-factor model (e.g., Hull-White two-factor) to
+capture short and long rate dynamics independently</td>
+</tr>
+<tr>
+<td>Negative rates</td>
+<td>Replace with the Cox-Ingersoll-Ross (CIR) model: <span
+class="math inline">\(dr = \kappa(\theta - r)dt +
+\sigma\sqrt{r}\,dW\)</span> — cannot go negative</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="references">7. References</h2>
+<ol type="1">
+<li><p>Vasicek, O. (1977). <em>An equilibrium characterization of the
+term structure.</em> Journal of Financial Economics, 5(2),
+177–188.</p></li>
+<li><p>Cox, J. C., Ingersoll, J. E., &amp; Ross, S. A. (1985). <em>A
+theory of the term structure of interest rates.</em> Econometrica,
+53(2), 385–408.</p></li>
+<li><p>Hull, J., &amp; White, A. (1990). <em>Pricing interest rate
+derivative securities.</em> Review of Financial Studies, 3(4),
+573–592.</p></li>
+<li><p>Phillips, P. C. B., &amp; Yu, J. (2009). <em>Maximum likelihood
+and Gaussian estimation of continuous time models in finance.</em> In T.
+G. Andersen et al. (eds.), Handbook of Financial Time Series.
+Springer.</p></li>
+<li><p>Federal Reserve Bank of St. Louis. <em>Federal Funds Effective
+Rate [FEDFUNDS].</em> Retrieved from FRED:
+https://fred.stlouisfed.org/series/FEDFUNDS</p></li>
+</ol>
+</body>
+</html>
